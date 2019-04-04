@@ -1,0 +1,3 @@
+/home/olof/Study/Курсач/Program/build/CMakeFiles/rebuild_cache.dir
+/home/olof/Study/Курсач/Program/build/CMakeFiles/VisualizationGit.dir
+/home/olof/Study/Курсач/Program/build/CMakeFiles/edit_cache.dir

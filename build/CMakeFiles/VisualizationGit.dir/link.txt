@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++17 -Wall -lm   CMakeFiles/VisualizationGit.dir/States.cpp.o CMakeFiles/VisualizationGit.dir/Tree.cpp.o CMakeFiles/VisualizationGit.dir/Utils.cpp.o CMakeFiles/VisualizationGit.dir/main.cpp.o CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o  -o VisualizationGit -lGL -lglfw -lGLEW 
