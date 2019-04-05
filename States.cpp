@@ -2,81 +2,131 @@
 #include "States.h"
 #include "Tree.h"
 #include "Utils.h"
+#include "ShaderProgram.h"
 #include <iostream>
 #include <math.h>
+#include <glm/gtx/string_cast.hpp>
 
-size_t countCirclesOnLevel(const size_t level) {
-  return level > 0 ? (level == 1 ? 1 : 3 * level) : 0;
+States::States(std::string full_path, std::string tree_hash) {
+  trees.push_back(Tree(full_path, tree_hash));
 }
 
 void States::initGraphic() {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
+  glGenBuffers(1, &VBO2);
 
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+  const size_t countVars = 2;
+  const size_t countDots = 2;
+  const size_t massiveSize = CIRCLE_COUNT_DIVISIONS*countVars*countDots + 2;
+  GLfloat* buffer = new GLfloat[massiveSize];
+
+  size_t i = 0;
+  GLfloat step = 2 * M_PI / CIRCLE_COUNT_DIVISIONS;
+  for (float degree = 0; i < massiveSize - 2; degree += step) {
+    buffer[i++] = cos(degree) * CIRCLE_RADIUS;
+    buffer[i++] = sin(degree) * CIRCLE_RADIUS;
+    buffer[i++] = 0;
+    buffer[i++] = 0;
+  }
+  buffer[i++] = CIRCLE_RADIUS;
+  buffer[i++] = 0;
+
+  glBufferData(GL_ARRAY_BUFFER, massiveSize*sizeof(GLfloat), buffer, GL_STATIC_DRAW);
+
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
+  glEnableVertexAttribArray(0);
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+
   renderCurrent();
 
-  glBufferData(GL_ARRAY_BUFFER, currentLeafsCoordsSize*sizeof(GLfloat), leafsCoords,
-               GL_DYNAMIC_DRAW);
-
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat),
-                        (GLvoid *)0);
-  glEnableVertexAttribArray(0);
+  glBufferData(GL_ARRAY_BUFFER, trees[indexTree].countCurves * 2 * 2*sizeof(GLfloat), bufferLines, GL_DYNAMIC_DRAW);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
-void States::addCircle(float x, float y) {
-  size_t j = 0;
-  GLfloat step = 2 * M_PI / CIRCLE_COUNT_DIVISIONS;
-  for (float i = 0; i < 2 * M_PI; i += step, j++) {
-    if (j == CIRCLE_COUNT_DIVISIONS) {
-      break;
-    }
+void States::render() {
+  GLint modelLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "model");
+  GLint colorLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "uColor");
+  GLint scaleLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "scale");
 
-    leafsCoords[indexLeafsCoords++] = x + cos(i) * CIRCLE_RADIUS;
-    leafsCoords[indexLeafsCoords++] = y + sin(i) * CIRCLE_RADIUS;
-    leafsCoords[indexLeafsCoords++] = x + cos(i + step) * CIRCLE_RADIUS;
-    leafsCoords[indexLeafsCoords++] = y + sin(i + step) * CIRCLE_RADIUS;
-    leafsCoords[indexLeafsCoords++] = x;
-    leafsCoords[indexLeafsCoords++] = y;
+  glUniform4fv(colorLoc, 1, glm::value_ptr(glm::vec4(204.0/255, 0.0f, 204.0/255, 1.0f)));
+
+  glm::mat4 scaleMatrix = glm::mat4(1.0f);
+  scaleMatrix = glm::scale(scaleMatrix, glm::vec3(scale, scale, scale));
+  glUniformMatrix4fv(scaleLoc, 1, GL_FALSE, glm::value_ptr(scaleMatrix));
+
+  glBindVertexArray(VAO);
+  glBindBuffer(GL_ARRAY_BUFFER, VBO);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
+  for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(offsetX, offsetY, 0.0f));
+    model = glm::translate(model, leafTranslates[i]);
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    // плюс один потому что последняя координата это точка, замыкающая круг
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, (CIRCLE_COUNT_DIVISIONS + 1)*2);
+  }
+
+  glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
+
+  glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::translate(glm::mat4(1.0f), glm::vec3(offsetX, offsetY, 0.0f))));
+  for (size_t i = 0; i < trees[indexTree].countCurves; i++) {
+    glDrawArrays(GL_LINE_LOOP, i*2, 2);
+  }
+  glBindVertexArray(0);
+}
+
+void States::tick() {
+  for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
+    leafTranslates[i] += glm::vec3(0.001f, 0.001f, 0.001f);
   }
 }
 
-// TODO: переписать
-float getBigCircleRadius(int countLeafs) {
-  int level = 1;
+size_t countCirclesOnLevel(const size_t level) {
+  return level > 0 ? (level == 1 ? 1 : 3 * level) : 0;
+}
 
-  if (countLeafs == 0) {
-    return 0;
-  }
+void States::drawCircle(float x, float y) {
+  leafTranslates[indexLeafsCoords++] = glm::vec3(x, y, 0.0f);
+}
 
-  while (countLeafs > 0) {
-    countLeafs -= countCirclesOnLevel(level++);
-  }
-  level--;
+void States::drawLine(float x1, float y1, float x2, float y2) {
+  bufferLines[indexBufferLines++] = x1;
+  bufferLines[indexBufferLines++] = y1;
+  bufferLines[indexBufferLines++] = x2;
+  bufferLines[indexBufferLines++] = y2;
+}
 
-  return level * (CIRCLE_D + GAP_BETWEEN_CIRCLES) + CIRCLE_D*3 +
-         GAP_BETWEEN_CIRCLES;
+bool verticeIsEmpty(Vertice* v) {
+  return v->curves.size() == 0 && v->leafs.size() == 0;
 }
 
 void States::drawLeafs(GLfloat x, GLfloat y, Vertice *v) {
   size_t leafsLeft = v->leafs.size();
-  std::cout << leafsLeft << " шариков" << std::endl;
+  
+  if (leafsLeft == 2) {
+    drawCircle(x, y + CIRCLE_RADIUS);
+    drawCircle(x, y - GAP_BETWEEN_CIRCLES - CIRCLE_RADIUS);
+    return;
+  }
+
   if (leafsLeft > 0) {
     leafsLeft--;
-    addCircle(x, y);
+    drawCircle(x, y);
   }
 
   size_t level = 1;
   while (leafsLeft > 0) {
     level++;
     size_t countCirclesOnLev = countCirclesOnLevel(level);
-    size_t countCircles =
-        countCirclesOnLev < leafsLeft ? countCirclesOnLev : leafsLeft;
+    size_t countCircles = min(leafsLeft, countCirclesOnLev);
     leafsLeft -= countCircles;
 
     GLfloat degrees = M_PI/2;
@@ -86,117 +136,102 @@ void States::drawLeafs(GLfloat x, GLfloat y, Vertice *v) {
     }
 
     for (size_t i = 0; i < countCircles; i++, degrees += 2 * M_PI / countCircles) {
-      addCircle(x + cos(degrees) * ((level - 1) * (CIRCLE_D + GAP_BETWEEN_CIRCLES)),
+      drawCircle(x + cos(degrees) * ((level - 1) * (CIRCLE_D + GAP_BETWEEN_CIRCLES)),
                 y + sin(degrees) * ((level - 1) * (CIRCLE_D + GAP_BETWEEN_CIRCLES)));
     }
   }
 }
 
-States::States(std::string full_path, std::string tree_hash) {
-  trees.push_back(Tree(full_path, tree_hash));
-}
-
 void States::renderCurrent() {
-  Tree *currentTree = &trees[indexTree];
-  currentLeafsCoordsSize =
-      currentTree->countLeafs * 2 * (CIRCLE_COUNT_DIVISIONS) * 3
-      + 2*2*currentTree->countCurves;
-
-  if (leafsCoords) {
-    delete[] leafsCoords;
-  }
-  leafsCoords = new GLfloat[currentLeafsCoordsSize];
   indexLeafsCoords = 0;
-  indexCurvesCoords = currentTree->countLeafs * 2 * (CIRCLE_COUNT_DIVISIONS) * 3;
+  indexBufferLines = 0;
+  indexTree = 0;
+  leafTranslates = new glm::vec3[trees[indexTree].countLeafs];
+  bufferLines = new GLfloat[trees[indexTree].countCurves * 2 * 2];
 
-  drawCurves(0, 0, &currentTree->root, 0, 2);
+  drawTree();
 }
 
-void States::drawCurves(GLfloat x, GLfloat y, Vertice* v, int k, int w) {
+//
+const float GAP = 0.005;
+
+
+float calculateRadius(size_t leafsCount) {
+  if (leafsCount == 0) {
+    return CIRCLE_RADIUS;
+  }
+
+  size_t level = 1;
+  while (leafsCount > 0) {
+    level++;
+    size_t countCirclesOnLev = countCirclesOnLevel(level);
+    size_t countCircles = min(leafsCount, countCirclesOnLev);
+    leafsCount -= countCircles;
+  }
+
+  return ((level - 1) * (CIRCLE_D + GAP_BETWEEN_CIRCLES)) + CIRCLE_RADIUS;
+}
+
+float calculateMaxColumnRadius(Vertice* v) {
+  float maxColumnRadius = calculateRadius(v->leafs.size());
+  while (v->curves.size() > 0) {
+    v = &v->curves[0].vertice;
+    maxColumnRadius = max(maxColumnRadius, calculateRadius(v->leafs.size()));
+  }
+
+  return maxColumnRadius;
+}
+
+void States::drawVerticeAndLine(float x, float y, float childX, float childY, Vertice* v, std::string direction) {
+  if (verticeIsEmpty(v)) {
+    return;
+  }
+
+  drawLine(x, y, childX, childY);
+  drawVertice(childX, childY, v, direction);
+}
+
+void States::drawVertice(float x, float y, Vertice* v, std::string direction) {
+  float radius = calculateRadius(v->leafs.size());
+  float curvesSize = v->curves.size();
+
+  if (curvesSize > 0) {
+    drawVerticeAndLine(x, y, x, y - radius - GAP*10 - calculateRadius(v->curves[0].vertice.leafs.size()), &v->curves[0].vertice, direction);
+
+    for (size_t i = 1; i < curvesSize; i++) {
+      Vertice* currentV = &v->curves[i].vertice;
+
+      float childRadius = calculateMaxColumnRadius(currentV);
+      float childY = y - radius - GAP*10 - childRadius;
+
+      if (direction == "center") {
+        if (i % 2 == 1) {
+          drawVerticeAndLine(x, y, lBorder - GAP - childRadius, childY, currentV, "left");
+        } else {
+          drawVerticeAndLine(x, y, rBorder + GAP + childRadius, childY, currentV, "right");
+        }
+      } else if (direction == "left") {
+        drawVerticeAndLine(x, y, lBorder - GAP - childRadius, childY, currentV, direction);  
+      } else if (direction == "right") {
+        drawVerticeAndLine(x, y, rBorder + GAP + childRadius, childY, currentV, direction);  
+      }
+    }
+  }
+
   drawLeafs(x, y, v);
-  size_t countChildrens = v->curves.size();
-  GLfloat degrees = -k*(M_PI/4) + (w == 2 ? 0 : w == 0 ? M_PI/4 : -M_PI/4), rootCircleRadius = getBigCircleRadius(v->leafs.size());
-  GLfloat rad = rootCircleRadius + GAP_BETWEEN_CIRCLES;
-  GLfloat limit = w == 2 ? 2*M_PI : w == 0 ? 3*M_PI/4 : M_PI/4;
-  for (size_t i = 0; i < countChildrens; i++, degrees += limit/countChildrens) {
-    GLfloat r = rad + getBigCircleRadius(v->curves[i].vertice.leafs.size());
-    std::cout << x << " " << y << " " << x + cos(degrees)*r << " " << y + sin(degrees)*r << std::endl;
-    leafsCoords[indexCurvesCoords++] = x;
-    leafsCoords[indexCurvesCoords++] = y;
-    leafsCoords[indexCurvesCoords++] = x + cos(degrees)*r;
-    leafsCoords[indexCurvesCoords++] = y + sin(degrees)*r;
-    drawCurves(x + cos(degrees)*r, y + sin(degrees)*r, &v->curves[i].vertice, k + 1,
-      degrees > M_PI/4 && degrees <= 3*M_PI/4 ? 0 : 1 );
+  float possibleLBorder = x - radius;
+  float possibleRBorder = x + radius;
+
+  if (possibleLBorder < lBorder) {
+    lBorder = possibleLBorder;
+  }
+
+  if (possibleRBorder > rBorder) {
+    rBorder = possibleRBorder;
   }
 }
 
-void States::render() {
-  glBindVertexArray(VAO);
-  for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
-    glDrawArrays(GL_TRIANGLE_STRIP, i*CIRCLE_COUNT_DIVISIONS*3, CIRCLE_COUNT_DIVISIONS*3);
-  }
-  // glLineWidth(1);
-  for (size_t i = 0; i < trees[indexTree].countCurves; i++) {
-    glDrawArrays(GL_LINE_LOOP, trees[indexTree].countLeafs * (CIRCLE_COUNT_DIVISIONS) * 3 + i*2, 2);
-  }
-  glBindVertexArray(0);
+void States::drawTree() {
+  lBorder = rBorder = 0.0f;
+  drawVertice(0, 1 - GAP - calculateRadius(trees[indexTree].root.leafs.size()), &trees[indexTree].root, "center");
 }
-
-void States::tick() {
-  // TODO: index++;
-}
-
-
-
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// const float GAP = 0.005;
-//
-//
-// float calculateRadius(size_t leafsCount) {
-//   // считает радиус для leafsCount листьев
-//   return leafsCount;
-// }
-//
-// float checkVertice(Vertice* v) {
-//   v->radius = calculateRadius(v->leafs.size());
-//
-//   if (v->curves.size() == 0) {
-//     v->childRadius = v->radius;
-//     return v->radius;
-//   }
-//
-//   float radius = GAP*(v->curves.size() - 1);
-//   for (size_t i = 0; i < v->curves.size(); i++) {
-//     radius += checkVertice(&v->curves[i].vertice);
-//   }
-//
-//   v->childRadius = radius;
-//   return radius;
-// }
-//
-// void setScale(float scale) {
-//   // set scale
-// }
-//
-// void drawVertice(float x, float y, Vertice* v) {
-//   drawLeafs(x, y, v);
-//   for (size_t i = 0; i < v->curves.size(); i++) {
-//     drawVertice(x, y + v->radius + GAP + v->curves[i].vertice.radius, &v->curves[i].vertice);
-//   }
-// }
-//
-// void States::drawTree() {
-//   float radius = checkVertice(&trees[indexTree].root);
-//   drawVertice(0, 1 - GAP - trees[indexTree].root.radius, &trees[indexTree].root);
-// }

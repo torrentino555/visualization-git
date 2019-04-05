@@ -11,6 +11,9 @@ class Vertice {
 public:
   std::vector<Leaf> leafs;
   std::vector<Curve> curves;
+
+  float radius = 0.0f;
+  float childRadius = 0.0f;
 };
 
 class Tree {

@@ -87,3 +87,11 @@ std::string readFile(std::string path) {
   
   return text;
 }
+
+float min(float x, float y) {
+  return x > y ? y : x;
+}
+
+float max(float x, float y) {
+  return x > y ? x : y;
+}

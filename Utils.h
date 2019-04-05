@@ -11,3 +11,7 @@ std::vector<std::string> splitStringByDelimiter(std::string s, std::string delim
 std::vector<std::string> splitStringByTwoDelimiters(std::string s, std::string delimiter, std::string delimiter2);
 
 std::string readFile(std::string path);
+
+float min(float, float);
+
+float max(float x, float y);

@@ -5,27 +5,77 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <chrono>
+#include <map>
+#include <queue>
 
 // TODO: добавить resize
 
 // true - отрисовывать линиями, false - заполнять цветом
 bool polygonMode = false;
+States *states;
 
-void key_callback(GLFWwindow *window, int key, int scancode, int action,
-                  int mode) {
-  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-    glfwSetWindowShouldClose(window, GL_TRUE);
-  } else if (key == GLFW_KEY_TAB && action == GLFW_PRESS) {
-    polygonMode = !polygonMode;
-    if (polygonMode) {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    } else {
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    }
+struct key_event {
+    int key, code, action, modifiers;
+    std::chrono::steady_clock::time_point time_of_event;
+    key_event(int key, int code, int action, int modifiers, std::chrono::steady_clock::time_point time_of_event) 
+      : key(key), code(code), action(action), modifiers(modifiers), time_of_event(time_of_event) {};
+};
+
+std::map<int, bool> keys;
+std::queue<key_event> unhandled_keys;
+void handle_key(GLFWwindow* window, int key, int code, int action, int modifiers) {
+    unhandled_keys.emplace(key, code, action, modifiers, std::chrono::steady_clock::now());
+}
+
+void pressKeys(GLFWwindow *window, int key) {
+  switch (key)
+  {
+    case GLFW_KEY_TAB:
+      polygonMode = !polygonMode;
+      if (polygonMode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+      } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      }  
+      break;
+    case GLFW_KEY_ESCAPE:
+      glfwSetWindowShouldClose(window, GL_TRUE);
+      break;
+  
+    default:
+      break;
   }
 }
 
+void handle_input(GLFWwindow *window, float delta_time) {
+    //Anything that should happen "when the users presses the key" should happen here
+    while(!unhandled_keys.empty()) {
+        key_event event = unhandled_keys.front();
+        unhandled_keys.pop();
+        pressKeys(window, event.key);
+        bool pressed = event.action == GLFW_PRESS || event.action == GLFW_REPEAT;
+        keys[event.key] = pressed;
+    }
+    //Anything that should happen "while the key is held down" should happen here.
+    float speedScaleInSecond = 0.5;
+    if(keys[GLFW_KEY_W]) states->offsetY -= delta_time;
+    if(keys[GLFW_KEY_S]) states->offsetY += delta_time;
+    if(keys[GLFW_KEY_A]) states->offsetX += delta_time;
+    if(keys[GLFW_KEY_D]) states->offsetX -= delta_time;
+    if(keys[GLFW_KEY_MINUS]) {
+      float scaleAddValue = speedScaleInSecond*(delta_time);
+      if (states->scale - scaleAddValue > 0) {
+        states->scale -= scaleAddValue;
+      }
+    }
+    if (keys[GLFW_KEY_EQUAL]) {
+      states->scale += speedScaleInSecond*(delta_time);
+    }
+}
+
 void GraphicEngine::initGLFW() {
+  states = commitTrees;
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -61,7 +111,7 @@ int GraphicEngine::start() {
     return -1;
   }
 
-  glfwSetKeyCallback(window, key_callback);
+  glfwSetKeyCallback(window, handle_key);
 
   int width, height;
   glfwGetFramebufferSize(window, &width, &height);
@@ -69,6 +119,8 @@ int GraphicEngine::start() {
 
   colorProgram = new ShaderProgram(readFile(VERTEX_SHADER_PATH),
                                    readFile(FRAGMENT_SHADER_PATH));
+
+  commitTrees->shaderProgram = colorProgram;
 
   glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -80,6 +132,13 @@ int GraphicEngine::start() {
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
+
+    float now = glfwGetTime();
+    static float last_update = now;
+    float delta_time = now - last_update;
+    last_update = now;
+    handle_input(window, delta_time);
+
     render();
     glfwSwapBuffers(window);
   }
@@ -97,4 +156,5 @@ void GraphicEngine::render() {
   }
 
   commitTrees->render();
+  // commitTrees->tick();
 }

@@ -13,6 +13,14 @@ GL/glew.h
 -
 Tree.h
 .././Tree.h
+ShaderProgram.h
+.././ShaderProgram.h
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+glm/gtc/type_ptr.hpp
+-
 
 .././Tree.h
 vector
@@ -32,6 +40,8 @@ GL/glew.h
 GLFW/glfw3.h
 -
 string
+-
+chrono
 -
 ShaderProgram.h
 ../graphic/ShaderProgram.h
@@ -67,9 +77,13 @@ Tree.h
 /home/olof/Study/Курсач/Program/Tree.h
 Utils.h
 /home/olof/Study/Курсач/Program/Utils.h
+ShaderProgram.h
+/home/olof/Study/Курсач/Program/ShaderProgram.h
 iostream
 -
 math.h
+-
+glm/gtx/string_cast.hpp
 -
 
 /home/olof/Study/Курсач/Program/States.h
@@ -79,6 +93,14 @@ GL/glew.h
 -
 Tree.h
 /home/olof/Study/Курсач/Program/Tree.h
+ShaderProgram.h
+/home/olof/Study/Курсач/Program/ShaderProgram.h
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+glm/gtc/type_ptr.hpp
+-
 
 /home/olof/Study/Курсач/Program/Tree.cpp
 Tree.h
@@ -139,6 +161,12 @@ GLFW/glfw3.h
 -
 iostream
 -
+chrono
+-
+map
+-
+queue
+-
 
 /home/olof/Study/Курсач/Program/graphic/GraphicEngine.h
 GL/glew.h
@@ -146,6 +174,8 @@ GL/glew.h
 GLFW/glfw3.h
 -
 string
+-
+chrono
 -
 ShaderProgram.h
 /home/olof/Study/Курсач/Program/graphic/ShaderProgram.h

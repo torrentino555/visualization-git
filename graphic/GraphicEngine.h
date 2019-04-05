@@ -7,8 +7,8 @@
 
 class GraphicEngine {
 private:
-  const int WINDOW_WIDTH = 800;
-  const int WINDOW_HEIGHT = 800;
+  const int WINDOW_WIDTH = 1080;
+  const int WINDOW_HEIGHT = 1080;
   const std::string PROGRAM_NAME = "Визуализация логов Git";
   const std::string VERTEX_SHADER_PATH = "../resources/vertex-shader";
   const std::string FRAGMENT_SHADER_PATH = "../resources/fragment-shader";
