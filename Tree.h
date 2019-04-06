@@ -21,6 +21,7 @@ private:
   std::string full_path;
 
   void add_vertice(Vertice *vertice, std::string tree_hash);
+  void modifyVertice(Vertice*, std::string);
 public:
   size_t countLeafs = 0;
   size_t countCurves = 0;
@@ -28,16 +29,19 @@ public:
   Vertice root;
 
   Tree(std::string full_path, std::string tree_hash);
+  void applyCommit(std::string);
 };
 
 // лист
 class Leaf {
-private:
-  std::string commit_hash;
 public:
+  std::string commit_hash;
   std::string label;
 
   Leaf(std::string label, std::string commit_hash) : commit_hash(commit_hash), label(label) {};
+  bool operator< (const Leaf& e) const {
+    return commit_hash.compare(e.commit_hash);
+  };
 };
 
 // дуга
@@ -49,4 +53,7 @@ public:
   std::string label;
 
   Curve(std::string label, std::string commit_hash) : commit_hash(commit_hash), label(label) {};
+  bool operator< (const Curve& e) const {
+    return commit_hash.compare(e.commit_hash);
+  };
 };

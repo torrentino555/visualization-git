@@ -13,7 +13,6 @@
 
 // true - отрисовывать линиями, false - заполнять цветом
 bool polygonMode = false;
-States *states;
 
 struct key_event {
     int key, code, action, modifiers;
@@ -48,7 +47,10 @@ void pressKeys(GLFWwindow *window, int key) {
   }
 }
 
-void handle_input(GLFWwindow *window, float delta_time) {
+void GraphicEngine::handle_input() {
+    auto now = std::chrono::steady_clock::now();
+    float delta_time = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdate).count()/1000.0f;
+    lastUpdate = now;
     //Anything that should happen "when the users presses the key" should happen here
     while(!unhandled_keys.empty()) {
         key_event event = unhandled_keys.front();
@@ -59,23 +61,22 @@ void handle_input(GLFWwindow *window, float delta_time) {
     }
     //Anything that should happen "while the key is held down" should happen here.
     float speedScaleInSecond = 0.5;
-    if(keys[GLFW_KEY_W]) states->offsetY -= delta_time;
-    if(keys[GLFW_KEY_S]) states->offsetY += delta_time;
-    if(keys[GLFW_KEY_A]) states->offsetX += delta_time;
-    if(keys[GLFW_KEY_D]) states->offsetX -= delta_time;
+    if(keys[GLFW_KEY_W]) commitTrees->offsetY -= delta_time;
+    if(keys[GLFW_KEY_S]) commitTrees->offsetY += delta_time;
+    if(keys[GLFW_KEY_A]) commitTrees->offsetX += delta_time;
+    if(keys[GLFW_KEY_D]) commitTrees->offsetX -= delta_time;
     if(keys[GLFW_KEY_MINUS]) {
       float scaleAddValue = speedScaleInSecond*(delta_time);
-      if (states->scale - scaleAddValue > 0) {
-        states->scale -= scaleAddValue;
+      if (commitTrees->scale - scaleAddValue > 0) {
+        commitTrees->scale -= scaleAddValue;
       }
     }
     if (keys[GLFW_KEY_EQUAL]) {
-      states->scale += speedScaleInSecond*(delta_time);
+      commitTrees->scale += speedScaleInSecond*(delta_time);
     }
 }
 
 void GraphicEngine::initGLFW() {
-  states = commitTrees;
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -133,11 +134,7 @@ int GraphicEngine::start() {
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
 
-    float now = glfwGetTime();
-    static float last_update = now;
-    float delta_time = now - last_update;
-    last_update = now;
-    handle_input(window, delta_time);
+    handle_input();
 
     render();
     glfwSwapBuffers(window);

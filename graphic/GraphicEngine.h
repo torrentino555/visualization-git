@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <chrono>
 #include "ShaderProgram.h"
 #include "States.h"
 
@@ -18,11 +19,14 @@ private:
   ShaderProgram *lastProgram = nullptr;
   States *commitTrees = nullptr;
 
+  std::chrono::time_point<std::chrono::steady_clock> lastUpdate;
+  
+  void handle_input();
   void initGLFW();
   int initWindow();
   void render();
 
 public:
-  GraphicEngine(States *states) : commitTrees(states) {};
+  GraphicEngine(States *states) : commitTrees(states), lastUpdate(std::chrono::steady_clock::now()) {};
   int start();
 };
