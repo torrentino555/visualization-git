@@ -23,9 +23,6 @@ private:
   void add_vertice(Vertice *vertice, std::string tree_hash);
   void modifyVertice(Vertice*, std::string);
 public:
-  size_t countLeafs = 0;
-  size_t countCurves = 0;
-
   Vertice root;
 
   Tree(std::string full_path, std::string tree_hash);

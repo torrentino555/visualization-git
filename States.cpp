@@ -11,6 +11,16 @@ States::States(std::string full_path, std::string tree_hash) {
   trees.push_back(Tree(full_path, tree_hash));
 }
 
+void generateCircle(std::vector<Point>* v) {
+  size_t i = 0;
+  GLfloat step = 2 * M_PI / CIRCLE_COUNT_DIVISIONS;
+  for (float degree = 0; i < CIRCLE_COUNT_DIVISIONS; i++, degree += step) {
+    v->push_back(Point{cos(degree) * CIRCLE_RADIUS, sin(degree) * CIRCLE_RADIUS, 204.0/255, 0.0f, 204.0/255, 1.0f});
+    v->push_back(Point{0, 0, 204.0/255, 0.0f, 204.0/255, 1.0f});
+  }
+  v->push_back(Point{CIRCLE_RADIUS, 0, 204.0/255, 0.0f, 204.0/255, 1.0f});
+}
+
 void States::initGraphic() {
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -19,44 +29,20 @@ void States::initGraphic() {
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-  const size_t countVars = 2;
-  const size_t countDots = 2;
-  const size_t massiveSize = CIRCLE_COUNT_DIVISIONS*countVars*countDots + 2;
-  GLfloat* buffer = new GLfloat[massiveSize];
 
-  size_t i = 0;
-  GLfloat step = 2 * M_PI / CIRCLE_COUNT_DIVISIONS;
-  for (float degree = 0; i < massiveSize - 2; degree += step) {
-    buffer[i++] = cos(degree) * CIRCLE_RADIUS;
-    buffer[i++] = sin(degree) * CIRCLE_RADIUS;
-    buffer[i++] = 0;
-    buffer[i++] = 0;
-  }
-  buffer[i++] = CIRCLE_RADIUS;
-  buffer[i++] = 0;
-
-  glBufferData(GL_ARRAY_BUFFER, massiveSize*sizeof(GLfloat), buffer, GL_STATIC_DRAW);
-
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
-  glEnableVertexAttribArray(0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-
-  renderCurrent();
-
-  glBufferData(GL_ARRAY_BUFFER, trees[indexTree].countCurves * 2 * 2*sizeof(GLfloat), bufferLines, GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
+  std::vector<Point> buffer;
+  generateCircle(&buffer);
+  glBufferData(GL_ARRAY_BUFFER, buffer.size()*sizeof(Point), &buffer[0], GL_STATIC_DRAW);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
 void States::render() {
-  GLint modelLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "model");
-  GLint colorLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "uColor");
-  GLint scaleLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "scale");
+  renderCurrent();
 
-  glUniform4fv(colorLoc, 1, glm::value_ptr(glm::vec4(204.0/255, 0.0f, 204.0/255, 1.0f)));
+  GLint modelLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "model");
+  GLint scaleLoc = glGetUniformLocation(shaderProgram->shaderProgramId, "scale");
 
   glm::mat4 scaleMatrix = glm::mat4(1.0f);
   scaleMatrix = glm::scale(scaleMatrix, glm::vec3(scale, scale, scale));
@@ -64,29 +50,41 @@ void States::render() {
 
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
-  for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
+
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
+  glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)(2 * sizeof(GLfloat)));
+  glEnableVertexAttribArray(1);
+
+  for (size_t i = 0; i < leafTranslates.size(); i++) {
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(offsetX, offsetY, 0.0f));
     model = glm::translate(model, leafTranslates[i]);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    // плюс один потому что последняя координата это точка, замыкающая круг
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, (CIRCLE_COUNT_DIVISIONS + 1)*2);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, leafTranslates.size());
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid *)0);
+
+  glBufferData(GL_ARRAY_BUFFER, bufferLines.size()*sizeof(Line), &bufferLines[0], GL_DYNAMIC_DRAW);
+  
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)0);
+  glEnableVertexAttribArray(0);
+
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid *)(2 * sizeof(GLfloat)));
+  glEnableVertexAttribArray(1);
 
   glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(glm::translate(glm::mat4(1.0f), glm::vec3(offsetX, offsetY, 0.0f))));
-  for (size_t i = 0; i < trees[indexTree].countCurves; i++) {
+  for (size_t i = 0; i < bufferLines.size(); i++) {
     glDrawArrays(GL_LINE_LOOP, i*2, 2);
   }
   glBindVertexArray(0);
 }
 
 void States::tick() {
-  for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
-    leafTranslates[i] += glm::vec3(0.001f, 0.001f, 0.001f);
-  }
+  // for (size_t i = 0; i < trees[indexTree].countLeafs; i++) {
+  //   leafTranslates[i] += glm::vec3(0.001f, 0.001f, 0.001f);
+  // }
 }
 
 size_t countCirclesOnLevel(const size_t level) {
@@ -94,14 +92,14 @@ size_t countCirclesOnLevel(const size_t level) {
 }
 
 void States::drawCircle(float x, float y) {
-  leafTranslates[indexLeafsCoords++] = glm::vec3(x, y, 0.0f);
+  leafTranslates.push_back(glm::vec3(x, y, 0.0f));
 }
 
 void States::drawLine(float x1, float y1, float x2, float y2) {
-  bufferLines[indexBufferLines++] = x1;
-  bufferLines[indexBufferLines++] = y1;
-  bufferLines[indexBufferLines++] = x2;
-  bufferLines[indexBufferLines++] = y2;
+  bufferLines.push_back(Line{
+    Point{x1, y1, 204.0/255, 0.0f, 204.0/255, 1.0f},
+    Point{x2, y2, 204.0/255, 0.0f, 204.0/255, 1.0f}
+  });
 }
 
 bool verticeIsEmpty(Vertice* v) {
@@ -143,18 +141,11 @@ void States::drawLeafs(GLfloat x, GLfloat y, Vertice *v) {
 }
 
 void States::renderCurrent() {
-  indexLeafsCoords = 0;
-  indexBufferLines = 0;
   indexTree = 0;
-  leafTranslates = new glm::vec3[trees[indexTree].countLeafs];
-  bufferLines = new GLfloat[trees[indexTree].countCurves * 2 * 2];
-
+  leafTranslates.clear();
+  bufferLines.clear();
   drawTree();
 }
-
-//
-const float GAP = 0.005;
-
 
 float calculateRadius(size_t leafsCount) {
   if (leafsCount == 0) {
@@ -196,24 +187,24 @@ void States::drawVertice(float x, float y, Vertice* v, std::string direction) {
   float curvesSize = v->curves.size();
 
   if (curvesSize > 0) {
-    drawVerticeAndLine(x, y, x, y - radius - GAP*10 - calculateRadius(v->curves[0].vertice.leafs.size()), &v->curves[0].vertice, direction);
+    drawVerticeAndLine(x, y, x, y - radius - GAP_BETWEEN_BRANCHES*10 - calculateRadius(v->curves[0].vertice.leafs.size()), &v->curves[0].vertice, direction);
 
     for (size_t i = 1; i < curvesSize; i++) {
       Vertice* currentV = &v->curves[i].vertice;
 
       float childRadius = calculateMaxColumnRadius(currentV);
-      float childY = y - radius - GAP*10 - childRadius;
+      float childY = y - radius - GAP_BETWEEN_BRANCHES*10 - childRadius;
 
       if (direction == "center") {
         if (i % 2 == 1) {
-          drawVerticeAndLine(x, y, lBorder - GAP - childRadius, childY, currentV, "left");
+          drawVerticeAndLine(x, y, lBorder - GAP_BETWEEN_BRANCHES - childRadius, childY, currentV, "left");
         } else {
-          drawVerticeAndLine(x, y, rBorder + GAP + childRadius, childY, currentV, "right");
+          drawVerticeAndLine(x, y, rBorder + GAP_BETWEEN_BRANCHES + childRadius, childY, currentV, "right");
         }
       } else if (direction == "left") {
-        drawVerticeAndLine(x, y, lBorder - GAP - childRadius, childY, currentV, direction);  
+        drawVerticeAndLine(x, y, lBorder - GAP_BETWEEN_BRANCHES - childRadius, childY, currentV, direction);  
       } else if (direction == "right") {
-        drawVerticeAndLine(x, y, rBorder + GAP + childRadius, childY, currentV, direction);  
+        drawVerticeAndLine(x, y, rBorder + GAP_BETWEEN_BRANCHES + childRadius, childY, currentV, direction);  
       }
     }
   }
@@ -233,5 +224,5 @@ void States::drawVertice(float x, float y, Vertice* v, std::string direction) {
 
 void States::drawTree() {
   lBorder = rBorder = 0.0f;
-  drawVertice(0, 1 - GAP - calculateRadius(trees[indexTree].root.leafs.size()), &trees[indexTree].root, "center");
+  drawVertice(0, 1 - GAP_BETWEEN_BRANCHES - calculateRadius(trees[indexTree].root.leafs.size()), &trees[indexTree].root, "center");
 }

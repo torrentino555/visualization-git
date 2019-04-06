@@ -8,21 +8,23 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct Point {
+  GLfloat x, y, r, g, b, a;
+};
+
+struct Line {
+  Point first, second;
+};
+
 class States {
 private:
   std::vector<Tree> trees;
   size_t indexTree = 0;
-  size_t indexBufferLines;
 
   GLuint VBO, VAO, VBO2;
 
-  GLfloat* bufferLines = nullptr;
-
-  GLfloat* leafsCoords = nullptr;
-  glm::vec3* leafTranslates = nullptr;
-  size_t indexLeafsCoords;
-  size_t indexCurvesCoords;
-  size_t currentLeafsCoordsSize; // не уверен что нужна эта переменная
+  std::vector<Line> bufferLines;
+  std::vector<glm::vec3> leafTranslates;
 
   float lBorder;
   float rBorder;

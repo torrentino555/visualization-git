@@ -20,10 +20,8 @@ void Tree::add_vertice(Vertice *vertice, std::string tree_hash) {
     std::vector<std::string> tokens = splitStringByTwoDelimiters(tree_lines[i], " ", "\t");
 
     if (tokens[TYPE_INDEX].find("blob") == 0) {
-      countLeafs++;
       vertice->leafs.push_back(Leaf(tokens[NAME_INDEX], tokens[HASH_INDEX]));
     } else if (tokens[TYPE_INDEX].find("tree") == 0) {
-      countCurves++;
       vertice->curves.push_back(Curve(tokens[NAME_INDEX], tokens[HASH_INDEX]));
       add_vertice(&vertice->curves[vertice->curves.size() - 1].vertice, tokens[HASH_INDEX]);
     }
