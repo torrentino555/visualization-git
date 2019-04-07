@@ -11,6 +11,7 @@ CMakeFiles/VisualizationGit.dir/States.cpp.o: ../Utils.h
 
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../graphic/Shader.h
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../graphic/ShaderProgram.h
+CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../Constants.h
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../States.h
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../Tree.cpp
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../Tree.h

@@ -4,7 +4,7 @@
 
 std::string exec(const std::string cmd);
 
-std::string get_comiit_or_tree_text(std::string path, std::string commitHash);
+std::string get_commit_or_tree_text(std::string path, std::string commitHash);
 
 std::vector<std::string> splitStringByDelimiter(std::string s, std::string delimiter);
 

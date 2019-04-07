@@ -49,39 +49,9 @@ int main(int args, char* argv[]) {
         std::string last_commit;
         getline(file_master, last_commit);
 
-        std::stack<std::string> trees;
-        std::stack<std::string> commits;
-        std::set<std::string> parentsSet;
-
-        commits.push(last_commit);
-        parentsSet.insert(last_commit);
-
-        // while (!commits.empty()) {
-          std::string commitHash = commits.top();
-          commits.pop();
-
-          std::string commit_text = get_comiit_or_tree_text(fullPath.data(), commitHash);
-
-          // std::cout << commit_text;
-
-          std::vector<std::string> lines = splitStringByDelimiter(commit_text, "\n");
-
-          for (size_t i = 0; i < lines.size(); i++) {
-            if (lines[i].find("tree") == 0) {
-              trees.push(lines[i].substr(5));
-            } else if (lines[i].find("parent") == 0) {
-              std::string parentCommit = lines[i].substr(7);
-              if (parentsSet.find(parentCommit) == parentsSet.end()) {
-                commits.push(parentCommit);
-                parentsSet.insert(parentCommit);
-              }
-            }
-          }
-        // }
-
         std::cout << "Start parse commit" << std::endl;
 
-        States s(fullPath.data(), trees.top());
+        States s(fullPath.data(), last_commit);
 
         std::cout << "Start graphic" << std::endl;
 

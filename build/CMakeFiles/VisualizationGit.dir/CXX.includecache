@@ -7,25 +7,23 @@
 #IncludeRegexTransform: 
 
 .././States.h
-string
--
-GL/glew.h
--
 Tree.h
 .././Tree.h
 ShaderProgram.h
 .././ShaderProgram.h
+
+.././Tree.h
+vector
+-
+string
+-
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
 -
 glm/gtc/type_ptr.hpp
 -
-
-.././Tree.h
-vector
--
-string
+GL/glew.h
 -
 
 .././Utils.h
@@ -87,24 +85,16 @@ glm/gtx/string_cast.hpp
 -
 
 /home/olof/Study/Курсач/Program/States.h
-string
--
-GL/glew.h
--
 Tree.h
 /home/olof/Study/Курсач/Program/Tree.h
 ShaderProgram.h
 /home/olof/Study/Курсач/Program/ShaderProgram.h
-glm/glm.hpp
--
-glm/gtc/matrix_transform.hpp
--
-glm/gtc/type_ptr.hpp
--
 
 /home/olof/Study/Курсач/Program/Tree.cpp
 Tree.h
 /home/olof/Study/Курсач/Program/Tree.h
+Constants.h
+/home/olof/Study/Курсач/Program/Constants.h
 States.h
 /home/olof/Study/Курсач/Program/States.h
 Utils.h
@@ -113,11 +103,23 @@ iostream
 -
 set
 -
+stack
+-
+glm/gtx/string_cast.hpp
+-
 
 /home/olof/Study/Курсач/Program/Tree.h
 vector
 -
 string
+-
+glm/glm.hpp
+-
+glm/gtc/matrix_transform.hpp
+-
+glm/gtc/type_ptr.hpp
+-
+GL/glew.h
 -
 
 /home/olof/Study/Курсач/Program/Utils.cpp

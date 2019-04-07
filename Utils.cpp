@@ -24,7 +24,7 @@ std::string exec(const std::string cmd) {
   return result;
 }
 
-std::string get_comiit_or_tree_text(std::string path, std::string commitHash) {
+std::string get_commit_or_tree_text(std::string path, std::string commitHash) {
   return exec("cd " + std::string(path) + " && git cat-file -p " + commitHash);
 }
 
