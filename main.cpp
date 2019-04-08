@@ -9,6 +9,7 @@
 #include "Tree.h"
 #include "Utils.h"
 #include "GraphicEngine.h"
+#include "WorkWithGit.h"
 
 int main(int args, char* argv[]) {
         if (args != 2) {
@@ -16,45 +17,19 @@ int main(int args, char* argv[]) {
                 return 0;
         }
 
-        std::array<char, 128> fullPath;
-        realpath(argv[1], fullPath.data());
-        std::string path_to_git = std::string(fullPath.data()) + "/.git/";
-        std::ifstream file_head(path_to_git + "HEAD");
+        // WorkWithGit git(argv[1]);
+        // while (git.next_commit()) {
+        //         git.get_diffs();
+        //         std::cout << "-------------" << std::endl;
+        // }
 
-        if (!file_head) {
-                std::cout << "Неправильный путь, проект не содержит системы git или папка .git повреждена" << std::endl;
-                return 0;
-        }
+        // std::cout << "Start parse commit" << std::endl;
 
-        std::string pathToLastCommitInCurrentBranch;
-        getline(file_head, pathToLastCommitInCurrentBranch);
+        std::string path(argv[1]);
+        States states(path);
 
-        if (pathToLastCommitInCurrentBranch.find("ref: ") != 0) {
-                std::cout << "Ожидалось: ref: [ref to commit]\nРеальность: " << pathToLastCommitInCurrentBranch << std::endl;
-                return 0;
-        }
+        // std::cout << "Start graphic" << std::endl;
 
-        // убираем начало строки "ref :"
-        pathToLastCommitInCurrentBranch = pathToLastCommitInCurrentBranch.substr(5);
-
-        std::ifstream file_master(path_to_git + pathToLastCommitInCurrentBranch);
-
-        if (!file_master) {
-                std::cout << "Папка .git повреждена" << std::endl;
-                return 0;
-        }
-
-        // работа с коммитами
-
-        std::string last_commit;
-        getline(file_master, last_commit);
-
-        std::cout << "Start parse commit" << std::endl;
-
-        States s(fullPath.data(), last_commit);
-
-        std::cout << "Start graphic" << std::endl;
-
-        GraphicEngine engine(&s);
+        GraphicEngine engine(&states);
         engine.start();
 }

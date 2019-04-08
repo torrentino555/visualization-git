@@ -19,4 +19,4 @@ file(GLOB project_files ${LIST_REG_FOR_FILES})
 
 add_executable(${PROJECT_NAME} ${project_files})
 
-target_link_libraries(${PROJECT_NAME} GL glfw GLEW)
+target_link_libraries(${PROJECT_NAME} GL glfw GLEW git2)

@@ -1,16 +1,17 @@
+#ifndef _TREE_H_
+#define _TREE_H_
 #pragma once
 #include <vector>
 #include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
+#include "WorkWithGit.h"
 
 class Leaf;
 class Curve;
 class Vertice;
 struct Point;
 struct Line;
+class WorkWithGit;
 
 // вершина
 class Vertice {
@@ -24,17 +25,16 @@ public:
 
 class Tree {
 private:
-  std::string full_path;
+  WorkWithGit* git;
   std::vector<Line>* bufferLines;
-  std::vector<glm::vec3>* leafTranslates;
-  std::vector<std::string> commitTrees;
-  std::vector<std::string>::iterator currentTree;
+  std::vector<Point>* bufferCircles;
   float lBorder;
   float rBorder;
 
-  void add_vertice(Vertice *vertice, std::string tree_hash);
+  void addPath(Vertice*, std::string);
+
+  void add_vertice(Vertice *vertice, git_tree*);
   void modifyVertice(Vertice*, std::string);
-  bool nextTree();
   void drawLeafs(GLfloat x, GLfloat y, Vertice* v);
   void drawCircle(float x, float y);
   void drawCurves(GLfloat x, GLfloat y, Vertice* v, int k, int);
@@ -49,9 +49,12 @@ private:
 public:
   Vertice root;
 
-  Tree(std::string, std::string, std::vector<glm::vec3>*, std::vector<Line>*);
+  Tree(std::string, std::vector<Point>*, std::vector<Line>*);
   void render();
   void applyCommit(std::string);
+  void addFile(std::string path);
+  void removeFile(std::string path);
+  void modifyFile(std::string path);
 };
 
 // лист
@@ -79,3 +82,5 @@ public:
     return commit_hash.compare(e.commit_hash);
   };
 };
+
+#endif

@@ -57,9 +57,33 @@ include CMakeFiles/VisualizationGit.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/VisualizationGit.dir/flags.make
 
+CMakeFiles/VisualizationGit.dir/Animations.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
+CMakeFiles/VisualizationGit.dir/Animations.cpp.o: ../Animations.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/VisualizationGit.dir/Animations.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/Animations.cpp.o -c /home/olof/Study/Курсач/Program/Animations.cpp
+
+CMakeFiles/VisualizationGit.dir/Animations.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/VisualizationGit.dir/Animations.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/olof/Study/Курсач/Program/Animations.cpp > CMakeFiles/VisualizationGit.dir/Animations.cpp.i
+
+CMakeFiles/VisualizationGit.dir/Animations.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/VisualizationGit.dir/Animations.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/olof/Study/Курсач/Program/Animations.cpp -o CMakeFiles/VisualizationGit.dir/Animations.cpp.s
+
+CMakeFiles/VisualizationGit.dir/Animations.cpp.o.requires:
+
+.PHONY : CMakeFiles/VisualizationGit.dir/Animations.cpp.o.requires
+
+CMakeFiles/VisualizationGit.dir/Animations.cpp.o.provides: CMakeFiles/VisualizationGit.dir/Animations.cpp.o.requires
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/Animations.cpp.o.provides.build
+.PHONY : CMakeFiles/VisualizationGit.dir/Animations.cpp.o.provides
+
+CMakeFiles/VisualizationGit.dir/Animations.cpp.o.provides.build: CMakeFiles/VisualizationGit.dir/Animations.cpp.o
+
+
 CMakeFiles/VisualizationGit.dir/States.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
 CMakeFiles/VisualizationGit.dir/States.cpp.o: ../States.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/VisualizationGit.dir/States.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/VisualizationGit.dir/States.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/States.cpp.o -c /home/olof/Study/Курсач/Program/States.cpp
 
 CMakeFiles/VisualizationGit.dir/States.cpp.i: cmake_force
@@ -83,7 +107,7 @@ CMakeFiles/VisualizationGit.dir/States.cpp.o.provides.build: CMakeFiles/Visualiz
 
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
 CMakeFiles/VisualizationGit.dir/Tree.cpp.o: ../Tree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/VisualizationGit.dir/Tree.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/VisualizationGit.dir/Tree.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/Tree.cpp.o -c /home/olof/Study/Курсач/Program/Tree.cpp
 
 CMakeFiles/VisualizationGit.dir/Tree.cpp.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/VisualizationGit.dir/Tree.cpp.o.provides.build: CMakeFiles/Visualizat
 
 CMakeFiles/VisualizationGit.dir/Utils.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
 CMakeFiles/VisualizationGit.dir/Utils.cpp.o: ../Utils.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/VisualizationGit.dir/Utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/VisualizationGit.dir/Utils.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/Utils.cpp.o -c /home/olof/Study/Курсач/Program/Utils.cpp
 
 CMakeFiles/VisualizationGit.dir/Utils.cpp.i: cmake_force
@@ -129,9 +153,33 @@ CMakeFiles/VisualizationGit.dir/Utils.cpp.o.provides: CMakeFiles/VisualizationGi
 CMakeFiles/VisualizationGit.dir/Utils.cpp.o.provides.build: CMakeFiles/VisualizationGit.dir/Utils.cpp.o
 
 
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o: ../WokWithGit.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o -c /home/olof/Study/Курсач/Program/WokWithGit.cpp
+
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/olof/Study/Курсач/Program/WokWithGit.cpp > CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.i
+
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/olof/Study/Курсач/Program/WokWithGit.cpp -o CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.s
+
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.requires:
+
+.PHONY : CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.requires
+
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.provides: CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.requires
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.provides.build
+.PHONY : CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.provides
+
+CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.provides.build: CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o
+
+
 CMakeFiles/VisualizationGit.dir/main.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
 CMakeFiles/VisualizationGit.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/VisualizationGit.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/VisualizationGit.dir/main.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/main.cpp.o -c /home/olof/Study/Курсач/Program/main.cpp
 
 CMakeFiles/VisualizationGit.dir/main.cpp.i: cmake_force
@@ -155,7 +203,7 @@ CMakeFiles/VisualizationGit.dir/main.cpp.o.provides.build: CMakeFiles/Visualizat
 
 CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o: CMakeFiles/VisualizationGit.dir/flags.make
 CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o: ../graphic/GraphicEngine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o"
 	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o -c /home/olof/Study/Курсач/Program/graphic/GraphicEngine.cpp
 
 CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.i: cmake_force
@@ -179,23 +227,27 @@ CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o.provides.build: CMak
 
 # Object files for target VisualizationGit
 VisualizationGit_OBJECTS = \
+"CMakeFiles/VisualizationGit.dir/Animations.cpp.o" \
 "CMakeFiles/VisualizationGit.dir/States.cpp.o" \
 "CMakeFiles/VisualizationGit.dir/Tree.cpp.o" \
 "CMakeFiles/VisualizationGit.dir/Utils.cpp.o" \
+"CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o" \
 "CMakeFiles/VisualizationGit.dir/main.cpp.o" \
 "CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o"
 
 # External object files for target VisualizationGit
 VisualizationGit_EXTERNAL_OBJECTS =
 
+VisualizationGit: CMakeFiles/VisualizationGit.dir/Animations.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/States.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/Tree.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/Utils.cpp.o
+VisualizationGit: CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/main.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o
 VisualizationGit: CMakeFiles/VisualizationGit.dir/build.make
 VisualizationGit: CMakeFiles/VisualizationGit.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable VisualizationGit"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/olof/Study/Курсач/Program/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable VisualizationGit"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/VisualizationGit.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -203,9 +255,11 @@ CMakeFiles/VisualizationGit.dir/build: VisualizationGit
 
 .PHONY : CMakeFiles/VisualizationGit.dir/build
 
+CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/Animations.cpp.o.requires
 CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/States.cpp.o.requires
 CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/Tree.cpp.o.requires
 CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/Utils.cpp.o.requires
+CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o.requires
 CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/main.cpp.o.requires
 CMakeFiles/VisualizationGit.dir/requires: CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o.requires
 

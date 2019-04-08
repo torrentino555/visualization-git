@@ -123,6 +123,33 @@ VisualizationGit/fast:
 	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/build
 .PHONY : VisualizationGit/fast
 
+Animations.o: Animations.cpp.o
+
+.PHONY : Animations.o
+
+# target to build an object file
+Animations.cpp.o:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/Animations.cpp.o
+.PHONY : Animations.cpp.o
+
+Animations.i: Animations.cpp.i
+
+.PHONY : Animations.i
+
+# target to preprocess a source file
+Animations.cpp.i:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/Animations.cpp.i
+.PHONY : Animations.cpp.i
+
+Animations.s: Animations.cpp.s
+
+.PHONY : Animations.s
+
+# target to generate assembly for a file
+Animations.cpp.s:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/Animations.cpp.s
+.PHONY : Animations.cpp.s
+
 States.o: States.cpp.o
 
 .PHONY : States.o
@@ -204,6 +231,33 @@ Utils.cpp.s:
 	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/Utils.cpp.s
 .PHONY : Utils.cpp.s
 
+WokWithGit.o: WokWithGit.cpp.o
+
+.PHONY : WokWithGit.o
+
+# target to build an object file
+WokWithGit.cpp.o:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o
+.PHONY : WokWithGit.cpp.o
+
+WokWithGit.i: WokWithGit.cpp.i
+
+.PHONY : WokWithGit.i
+
+# target to preprocess a source file
+WokWithGit.cpp.i:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.i
+.PHONY : WokWithGit.cpp.i
+
+WokWithGit.s: WokWithGit.cpp.s
+
+.PHONY : WokWithGit.s
+
+# target to generate assembly for a file
+WokWithGit.cpp.s:
+	$(MAKE) -f CMakeFiles/VisualizationGit.dir/build.make CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.s
+.PHONY : WokWithGit.cpp.s
+
 graphic/GraphicEngine.o: graphic/GraphicEngine.cpp.o
 
 .PHONY : graphic/GraphicEngine.o
@@ -267,6 +321,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... VisualizationGit"
 	@echo "... edit_cache"
+	@echo "... Animations.o"
+	@echo "... Animations.i"
+	@echo "... Animations.s"
 	@echo "... States.o"
 	@echo "... States.i"
 	@echo "... States.s"
@@ -276,6 +333,9 @@ help:
 	@echo "... Utils.o"
 	@echo "... Utils.i"
 	@echo "... Utils.s"
+	@echo "... WokWithGit.o"
+	@echo "... WokWithGit.i"
+	@echo "... WokWithGit.s"
 	@echo "... graphic/GraphicEngine.o"
 	@echo "... graphic/GraphicEngine.i"
 	@echo "... graphic/GraphicEngine.s"

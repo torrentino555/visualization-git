@@ -1,7 +1,9 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/VisualizationGit.dir/Animations.cpp.o"
   "CMakeFiles/VisualizationGit.dir/States.cpp.o"
   "CMakeFiles/VisualizationGit.dir/Tree.cpp.o"
   "CMakeFiles/VisualizationGit.dir/Utils.cpp.o"
+  "CMakeFiles/VisualizationGit.dir/WokWithGit.cpp.o"
   "CMakeFiles/VisualizationGit.dir/main.cpp.o"
   "CMakeFiles/VisualizationGit.dir/graphic/GraphicEngine.cpp.o"
   "VisualizationGit.pdb"

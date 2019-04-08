@@ -17,13 +17,13 @@ private:
   GLuint VBO, VAO, VBO2;
 
   std::vector<Line> bufferLines;
-  std::vector<glm::vec3> leafTranslates;
+  std::vector<Point> bufferCircles;
 public:
   ShaderProgram *shaderProgram = nullptr;
   GLfloat scale = 1.0f;
   GLfloat offsetX = 0.0f, offsetY = 0.0f;
 
-  States(std::string full_path, std::string tree_hash);
+  States(std::string);
 
   void initGraphic();
   void render();
