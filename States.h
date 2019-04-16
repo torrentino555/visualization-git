@@ -1,30 +1,33 @@
-#pragma once
+#ifndef _STATES_H_
+#define _STATES_H_
 #define GLM_ENABLE_EXPERIMENTAL
-#include "Tree.h"
+
 #include "ShaderProgram.h"
+#include "PointAndLine.h"
+#include "Tree.h"
 
-struct Point {
-  GLfloat x, y, r, g, b, a;
-};
-
-struct Line {
-  Point first, second;
-};
+class Tree;
 
 class States {
 private:
-  Tree* tree;
-  GLuint VBO, VAO, VBO2;
+    float lastScale = 1.0f;
+    std::chrono::steady_clock::time_point timeStartUpdateScale;
+    Tree *tree;
+    GLuint VBO, VAO;
 
-  std::vector<Line> bufferLines;
-  std::vector<Point> bufferCircles;
+    std::vector<Line> bufferLines;
+    std::vector<Point> bufferCircles;
 public:
-  ShaderProgram *shaderProgram = nullptr;
-  GLfloat scale = 1.0f;
-  GLfloat offsetX = 0.0f, offsetY = 0.0f;
+    bool autoZoom = true;
+    ShaderProgram *shaderProgram = nullptr;
+    GLfloat scale = 1.0f;
+    GLfloat offsetX = 0.0f, offsetY = 0.0f;
 
-  States(std::string);
+    States(std::string);
 
-  void initGraphic();
-  void render();
+    void initGraphic();
+
+    void render();
 };
+
+#endif

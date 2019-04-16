@@ -28,3 +28,11 @@ float min(float x, float y) {
 float max(float x, float y) {
   return x > y ? x : y;
 }
+
+size_t min(size_t x, size_t y) {
+    return x > y ? y : x;
+}
+
+size_t max(size_t x, size_t y) {
+    return x > y ? x : y;
+}

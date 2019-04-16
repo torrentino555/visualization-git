@@ -9,7 +9,6 @@
 #include "Tree.h"
 #include "Utils.h"
 #include "GraphicEngine.h"
-#include "WorkWithGit.h"
 
 int main(int args, char* argv[]) {
         if (args != 2) {

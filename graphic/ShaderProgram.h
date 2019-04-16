@@ -1,3 +1,5 @@
+#ifndef _SHADER_PROGRAM_H_
+#define _SHADER_PROGRAM_H_
 #pragma once
 #include "Shader.h"
 #include <GL/glew.h>
@@ -32,3 +34,5 @@ public:
     glUseProgram(shaderProgramId);
   }
 };
+
+#endif

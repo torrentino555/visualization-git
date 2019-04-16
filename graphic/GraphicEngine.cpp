@@ -17,13 +17,13 @@ bool polygonMode = false;
 struct key_event {
     int key, code, action, modifiers;
     std::chrono::steady_clock::time_point time_of_event;
-    key_event(int key, int code, int action, int modifiers, std::chrono::steady_clock::time_point time_of_event) 
+    key_event(int key, int code, int action, int modifiers, std::chrono::steady_clock::time_point time_of_event)
       : key(key), code(code), action(action), modifiers(modifiers), time_of_event(time_of_event) {};
 };
 
 std::map<int, bool> keys;
 std::queue<key_event> unhandled_keys;
-void handle_key(GLFWwindow* window, int key, int code, int action, int modifiers) {
+void handle_key(GLFWwindow*, int key, int code, int action, int modifiers) {
     unhandled_keys.emplace(key, code, action, modifiers, std::chrono::steady_clock::now());
 }
 

@@ -58,8 +58,8 @@ void WorkWithGit::get_diffs() {
 
     if (old_tree != nullptr && new_tree != nullptr) {
         git_diff* diff;
-        git_diff_tree_to_tree(&diff, repo, old_tree, new_tree, NULL);
-        git_diff_foreach(diff, diff_file_cb, NULL, NULL, NULL, tree);
+        git_diff_tree_to_tree(&diff, repo, old_tree, new_tree, nullptr);
+        git_diff_foreach(diff, diff_file_cb, nullptr, nullptr, nullptr, tree);
     }
 }
 
