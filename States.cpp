@@ -37,13 +37,23 @@ void States::render() {
 
   glm::mat4 scaleMatrix = glm::mat4(1.0f);
   if (autoZoom) {
-    float maxMax = max(max(tree->xMax - tree->xMin, tree->yMax - tree->yMin), 1.0f);
-    float autoScale = 2/maxMax;
-    scaleMatrix = glm::scale(scaleMatrix, glm::vec3(autoScale, autoScale, autoScale));
-    offsetX = (tree->xMax - tree->xMin)/2 - tree->xMax;
-    offsetY = (tree->yMax - tree->yMin)/2 - tree->yMax;
+      float nextScale = 2/max(max(tree->xMax - tree->xMin, tree->yMax - tree->yMin), 1.0f);
+      auto now = std::chrono::steady_clock::now();
+      auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - timeStartUpdateScale).count();
+      if (deltaTime > 1000) {
+          timeStartUpdateScale = now;
+          lastScale = nextScale;
+          scaleMatrix = glm::scale(scaleMatrix, glm::vec3(lastScale, lastScale, lastScale));
+          lastOffsetX = offsetX = (tree->xMax - tree->xMin)/2 - tree->xMax;
+          lastOffsetY = offsetY = (tree->yMax - tree->yMin)/2 - tree->yMax;
+      } else {
+          auto currentScale = lastScale + (deltaTime/1000.0f)*(nextScale - lastScale);
+          scaleMatrix = glm::scale(scaleMatrix, glm::vec3(currentScale, currentScale, currentScale));
+          offsetX = lastOffsetX + (deltaTime/1000.0f)*((tree->xMax - tree->xMin)/2 - tree->xMax - lastOffsetX);
+          offsetY = lastOffsetY + (deltaTime/1000.0f)*((tree->yMax - tree->yMin)/2 - tree->yMax - lastOffsetY);
+      }
   } else {
-    scaleMatrix = glm::scale(scaleMatrix, glm::vec3(scale, scale, scale));
+      scaleMatrix = glm::scale(scaleMatrix, glm::vec3(scale, scale, scale));
   }
 
   glUniformMatrix4fv(scaleLoc, 1, GL_FALSE, glm::value_ptr(scaleMatrix));

@@ -332,15 +332,13 @@ void Tree::preDraw(Vertice *v, float x, float y, std::string direction) {
         if (startIt != newCurves.end()) {
             size_t i = 1;
             for (auto it = ++startIt; it != newCurves.end(); it++, i++) {
-                Curve *curve = *it;
-
-                float childRadius = calculateMaxColumnRadius(&curve->vertice);
-                childY = y - radius - GAP_BETWEEN_BRANCHES * 10 - childRadius;
-
                 if (direction == "center") {
                     if (i % 2 == 1) {
-                        float childX = lBorder - GAP_BETWEEN_BRANCHES - childRadius;
                         while (it != newCurves.end()) {
+                            Curve *curve = *it;
+                            float childRadius = calculateMaxColumnRadius(&curve->vertice);
+                            float childX = lBorder - GAP_BETWEEN_BRANCHES - childRadius;
+                            childY = y - radius - GAP_BETWEEN_BRANCHES * 10 - childRadius;
                             if (curveIsEmpty(*it, x, y, childX, childY)) {
                                 v->curves_to_delete.push_back((*it)->label);
                                 animations->addAction(new Action{(*it)->index, Animations::REMOVE_CURVE});
@@ -351,8 +349,11 @@ void Tree::preDraw(Vertice *v, float x, float y, std::string direction) {
                             }
                         }
                     } else {
-                        float childX = rBorder + GAP_BETWEEN_BRANCHES + childRadius;
                         while (it != newCurves.end()) {
+                            Curve *curve = *it;
+                            float childRadius = calculateMaxColumnRadius(&curve->vertice);
+                            float childX = rBorder + GAP_BETWEEN_BRANCHES + childRadius;
+                            childY = y - radius - GAP_BETWEEN_BRANCHES * 10 - childRadius;
                             if (curveIsEmpty((*it), x, y, childX, childY)) {
                                 v->curves_to_delete.push_back((*it)->label);
                                 animations->addAction(new Action{(*it)->index, Animations::REMOVE_CURVE});
@@ -364,8 +365,11 @@ void Tree::preDraw(Vertice *v, float x, float y, std::string direction) {
                         }
                     }
                 } else if (direction == "left") {
-                    float childX = lBorder - GAP_BETWEEN_BRANCHES - childRadius;
                     while (it != newCurves.end()) {
+                        Curve *curve = *it;
+                        float childRadius = calculateMaxColumnRadius(&curve->vertice);
+                        float childX = lBorder - GAP_BETWEEN_BRANCHES - childRadius;
+                        childY = y - radius - GAP_BETWEEN_BRANCHES * 10 - childRadius;
                         if (curveIsEmpty((*it), x, y, childX, childY)) {
                             v->curves_to_delete.push_back((*it)->label);
                             animations->addAction(new Action{(*it)->index, Animations::REMOVE_CURVE});
@@ -376,8 +380,11 @@ void Tree::preDraw(Vertice *v, float x, float y, std::string direction) {
                         }
                     }
                 } else if (direction == "right") {
-                    float childX = rBorder + GAP_BETWEEN_BRANCHES + childRadius;
                     while (it != newCurves.end()) {
+                        Curve *curve = *it;
+                        float childRadius = calculateMaxColumnRadius(&curve->vertice);
+                        float childX = rBorder + GAP_BETWEEN_BRANCHES + childRadius;
+                        childY = y - radius - GAP_BETWEEN_BRANCHES * 10 - childRadius;
                         if (curveIsEmpty((*it), x, y, childX, childY)) {
                             v->curves_to_delete.push_back((*it)->label);
                             animations->addAction(new Action{(*it)->index, Animations::REMOVE_CURVE});

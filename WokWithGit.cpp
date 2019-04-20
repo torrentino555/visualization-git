@@ -49,7 +49,7 @@ bool WorkWithGit::next_commit() {
 
 void WorkWithGit::get_diffs() {
     if (old_tree == nullptr) {
-        // sha для пустой директории git, не костыль
+        // sha для пустой директории git
         const char* sha = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
         git_oid oid;
         git_oid_fromstr(&oid, sha);

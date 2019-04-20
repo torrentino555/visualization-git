@@ -11,7 +11,9 @@ class Tree;
 class States {
 private:
     float lastScale = 1.0f;
-    std::chrono::steady_clock::time_point timeStartUpdateScale;
+    float lastOffsetX = 0.0f;
+    float lastOffsetY = 0.0f;
+    std::chrono::steady_clock::time_point timeStartUpdateScale = std::chrono::steady_clock::now();
     Tree *tree;
     GLuint VBO, VAO;
 
